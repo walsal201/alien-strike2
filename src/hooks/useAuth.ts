@@ -3,18 +3,12 @@ import { supabase } from '@/integrations/supabase/client';
 
 const SESSION_TIMEOUT = 8 * 60 * 60 * 1000; // 8 hours
 
-// When no Supabase env vars are configured, run in local demo mode (no auth required)
-const SUPABASE_CONFIGURED =
-  !!import.meta.env.VITE_SUPABASE_URL && !!import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
 export const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(SUPABASE_CONFIGURED ? false : true);
-  const [sessionId, setSessionId] = useState<string | null>(SUPABASE_CONFIGURED ? null : 'local-demo');
-  const [isLoading, setIsLoading] = useState(SUPABASE_CONFIGURED);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!SUPABASE_CONFIGURED) return; // skip auth check in demo mode
-
     const checkAuth = () => {
       const session = sessionStorage.getItem('tactical_session');
       const authTime = sessionStorage.getItem('tactical_auth_time');
@@ -25,7 +19,6 @@ export const useAuth = () => {
           setIsAuthenticated(true);
           setSessionId(session);
         } else {
-          // Session expired
           logout();
         }
       }

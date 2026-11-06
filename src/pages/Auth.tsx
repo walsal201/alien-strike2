@@ -1,36 +1,33 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield } from 'lucide-react';
+import { Shield, Lock, AlertTriangle } from 'lucide-react';
 
-const SUPABASE_CONFIGURED =
-  !!import.meta.env.VITE_SUPABASE_URL && !!import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const ACCESS_CODE = 'Alpha@188305';
 
 const Auth = () => {
+  const [accessCode, setAccessCode] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // No Supabase configured — go straight to dashboard
-  useEffect(() => {
-    if (!SUPABASE_CONFIGURED) {
-      sessionStorage.setItem('tactical_session', 'local-demo');
-      sessionStorage.setItem('tactical_auth_time', Date.now().toString());
-      navigate('/');
-    }
-  }, [navigate]);
-
-  if (!SUPABASE_CONFIGURED) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-green-400 font-mono">INITIALIZING COMMAND CENTER...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Supabase-backed auth (used in production with env vars set)
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!accessCode) return;
+
+    setIsLoading(true);
+    setError('');
+
+    // Short delay for effect
+    setTimeout(() => {
+      if (accessCode === ACCESS_CODE) {
+        sessionStorage.setItem('tactical_session', 'authenticated');
+        sessionStorage.setItem('tactical_auth_time', Date.now().toString());
+        navigate('/');
+      } else {
+        setError('ACCESS DENIED — INVALID CODE');
+        setIsLoading(false);
+      }
+    }, 600);
   };
 
   return (
@@ -77,7 +74,7 @@ const Auth = () => {
             <input
               type="password"
               value={accessCode}
-              onChange={(e) => setAccessCode(e.target.value.toUpperCase())}
+              onChange={(e) => setAccessCode(e.target.value)}
               placeholder="ENTER CODE..."
               className="w-full bg-gray-900 border-2 border-green-600 text-green-400 font-mono text-lg p-4 text-center tracking-widest placeholder:text-gray-600 focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-400/20"
               autoFocus
