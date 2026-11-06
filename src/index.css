@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 10%;
+    --foreground: 120 100% 70%;
+    --card: 0 0% 0%;
+    --card-foreground: 120 100% 70%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 120 100% 70%;
+    --primary: 120 60% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 45 100% 50%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 210 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 120 60% 40%;
+    --input: 0 0% 20%;
+    --ring: 120 100% 50%;
+    --tactical-green: 120 60% 50%;
+    --tactical-dark: 0 0% 10%;
+    --tactical-darker: 0 0% 5%;
+    --warning-red: 0 84% 50%;
+    --status-blue: 210 100% 60%;
+    --alert-orange: 25 100% 55%;
+    --terminated-pink: 330 100% 71%;
+    --radius: 0.25rem;
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 120 100% 70%;
+    --sidebar-primary: 120 60% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 120 100% 70%;
+    --sidebar-border: 120 60% 40%;
+    --sidebar-ring: 120 100% 50%;
+  }
+
+  .dark {
+    --background: 0 0% 10%;
+    --foreground: 120 100% 70%;
+    --card: 0 0% 0%;
+    --card-foreground: 120 100% 70%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 120 100% 70%;
+    --primary: 120 60% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 45 100% 50%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 210 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 120 60% 40%;
+    --input: 0 0% 20%;
+    --ring: 120 100% 50%;
+    --tactical-green: 120 60% 50%;
+    --tactical-dark: 0 0% 10%;
+    --tactical-darker: 0 0% 5%;
+    --warning-red: 0 84% 50%;
+    --status-blue: 210 100% 60%;
+    --alert-orange: 25 100% 55%;
+    --terminated-pink: 330 100% 71%;
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 120 100% 70%;
+    --sidebar-primary: 120 60% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 120 100% 70%;
+    --sidebar-border: 120 60% 40%;
+    --sidebar-ring: 120 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

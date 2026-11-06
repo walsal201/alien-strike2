@@ -1,0 +1,11 @@
+DROP POLICY IF EXISTS "Insert deployment logs" ON public.deployment_logs;
+DROP POLICY IF EXISTS "Read own deployment logs" ON public.deployment_logs;
+DROP POLICY IF EXISTS "Insert drone status" ON public.drone_status_history;
+DROP POLICY IF EXISTS "Read drone status" ON public.drone_status_history;
+DROP POLICY IF EXISTS "Insert activity audit" ON public.user_activity_audit;
+DROP POLICY IF EXISTS "Read activity audit" ON public.user_activity_audit;
+REVOKE ALL ON public.deployment_logs, public.drone_status_history, public.user_activity_audit FROM PUBLIC, anon, authenticated;
+GRANT ALL ON public.deployment_logs, public.drone_status_history, public.user_activity_audit TO service_role;
+ALTER TABLE public.deployment_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.drone_status_history ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_activity_audit ENABLE ROW LEVEL SECURITY;
