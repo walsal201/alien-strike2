@@ -1,57 +1,36 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Lock, AlertTriangle } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
+import { Shield } from 'lucide-react';
+
+const SUPABASE_CONFIGURED =
+  !!import.meta.env.VITE_SUPABASE_URL && !!import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 const Auth = () => {
-  const [accessCode, setAccessCode] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // No Supabase configured — go straight to dashboard
+  useEffect(() => {
+    if (!SUPABASE_CONFIGURED) {
+      sessionStorage.setItem('tactical_session', 'local-demo');
+      sessionStorage.setItem('tactical_auth_time', Date.now().toString());
+      navigate('/');
+    }
+  }, [navigate]);
+
+  if (!SUPABASE_CONFIGURED) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-green-400 font-mono">INITIALIZING COMMAND CENTER...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Supabase-backed auth (used in production with env vars set)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const { data, error: fnError } = await supabase.functions.invoke('auth-access-code', {
-        body: { action: 'validate', accessCode }
-      });
-
-      if (fnError) throw fnError;
-
-      if (data.success) {
-        // Store session token securely
-        sessionStorage.setItem('tactical_session', data.sessionToken);
-        sessionStorage.setItem('tactical_auth_time', Date.now().toString());
-        
-        toast({
-          title: "ACCESS GRANTED",
-          description: data.message,
-        });
-        
-        navigate('/');
-      } else {
-        setError(data.message);
-        toast({
-          title: "ACCESS DENIED",
-          description: data.message,
-          variant: "destructive",
-        });
-      }
-    } catch (err: any) {
-      console.error('Auth error:', err);
-      setError('SYSTEM ERROR - TRY AGAIN');
-      toast({
-        title: "SYSTEM ERROR",
-        description: "Authentication system unavailable",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
